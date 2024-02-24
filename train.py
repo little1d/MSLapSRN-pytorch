@@ -39,10 +39,10 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=100):
 
 # CUDA for PyTorch
 # 设置CUDA_VISIBLE_DEVICES环境变量为"1,2,3"，这样PyTorch就只能看到这三个GPU
-os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3"
 # 检查CUDA是否可用（这将根据CUDA_VISIBLE_DEVICES的设置返回True，如果设置了至少一个可用的GPU）
 use_cuda = torch.cuda.is_available()
-device = torch.device("cuda" if use_cuda else "cpu")
+device = torch.device("cuda:0" if use_cuda else "cpu")
 
 max_epochs = 1000
 
@@ -52,6 +52,7 @@ training_generator = data.DataLoader(training_set, batch_size=64, shuffle=True, 
 
 validation_set = SRdataset("validation")
 validation_generator = data.DataLoader(validation_set, batch_size=64, shuffle=False, num_workers=1, pin_memory=True)
+print(len(validation_generator))
 
 net = LapSrnMS(5, 5, 4)
 

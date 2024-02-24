@@ -40,7 +40,7 @@ class SRdataset(Dataset):
     def __init__(self, settype):
         """Initialization"""
         # 定义后缀名字典
-        extension_dict = {'train': '*.jpg', 'test': '*.bmp', 'valid': '*.png'}
+        extension_dict = {'train': '*.jpg', 'test': '*.png', 'validation': '*.bmp'}
         file_extension = extension_dict.get(settype, '*.jpg')
         self.list_ids = glob.glob('dataset/{}/*'.format(settype) + file_extension) # 获取所有图像文件的index
         self.true_len = len(self.list_ids) # 实际加载的图像数量

@@ -12,10 +12,10 @@ clear;close all;
 function generate_mat(dataset, scale)
 %% settings
 folder = strcat('dataset/test/', dataset);
-
+disp(folder);
 %% generate data
 filepaths = dir(fullfile(folder,'*.png'));
-
+disp(filepaths);
 for i = 1 : length(filepaths)        
     im_gt = imread(fullfile(folder,filepaths(i).name));
     
@@ -31,7 +31,7 @@ for i = 1 : length(filepaths)
         sz = sz - mod(sz, scale);
         im_gt = im_gt(1:sz(1), 1:sz(2),:);
     end
-    
+
     if size(im_gt, 3) == 1
         im_gt = cat(3, im_gt, im_gt, im_gt);
     end
@@ -49,6 +49,7 @@ for i = 1 : length(filepaths)
     file_no_ext = file_no_ext{1};
     filename = sprintf('dataset/mat/%s/%dx/%s.mat', dataset, scale, ...
                        file_no_ext);
+    disp('2');
     save(filename, 'im_gt_y', 'im_b_y', 'im_gt', 'im_b', 'im_l_ycbcr', 'im_l_y', 'im_l');
 end
 

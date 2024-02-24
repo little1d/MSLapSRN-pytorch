@@ -48,8 +48,8 @@ The final folder structure is going to be something like this
 │   ├── dataset
 │   │   ├── mat
 │   │   │   ├── Set5
-│   │   │   │   ├── 2x
-│   │   │   │   ├── 4x
+│   │   │   │   ├── image_SRF_2
+│   │   │   │   ├── image_SRF_4
 │   │   │   ├── Another test set following the same schema
 │   │   ├── test
 │   │   │   ├── test set folders containing images

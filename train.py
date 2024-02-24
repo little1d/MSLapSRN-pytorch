@@ -3,6 +3,8 @@ import torch.optim as optim
 from SRdataset import SRdataset
 from lapsrn import *
 import shutil
+import os
+import torch
 
 
 def save_ckp(state, is_best, checkpoint_path, best_model_path):
@@ -36,8 +38,11 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=100):
 
 
 # CUDA for PyTorch
+# 设置CUDA_VISIBLE_DEVICES环境变量为"1,2,3"，这样PyTorch就只能看到这三个GPU
+os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3"
+# 检查CUDA是否可用（这将根据CUDA_VISIBLE_DEVICES的设置返回True，如果设置了至少一个可用的GPU）
 use_cuda = torch.cuda.is_available()
-device = torch.device("cuda:0" if use_cuda else "cpu")
+device = torch.device("cuda" if use_cuda else "cpu")
 
 max_epochs = 1000
 
@@ -51,6 +56,7 @@ validation_generator = data.DataLoader(validation_set, batch_size=64, shuffle=Fa
 net = LapSrnMS(5, 5, 4)
 
 if use_cuda:
+    net = torch.nn.DataParallel(net) #包装模型以支持多GPU
     net.to(device)
 
 criterion = CharbonnierLoss()

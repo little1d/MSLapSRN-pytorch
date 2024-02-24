@@ -34,7 +34,7 @@ net = LapSrnMS(5, 5, 4)
 net.load_state_dict(checkpoint['state_dict'])
 net.to('cuda:0')
 
-im_4x = get_y(Image.open("pr-curve.jpeg"))
+im_4x = get_y(Image.open("dataset/19021.png"))
 
 im = tf.to_tensor(im_4x)
 im = im.unsqueeze(0)

@@ -33,19 +33,24 @@ def transform(img, settype):
     return img_lr, img_2x, img_4x
 
 
+# 自定义数据集类，用于加载和预测处理图像数据，继承父类dataset
 class SRdataset(Dataset):
     """Characterizes a dataset for PyTorch"""
 
     def __init__(self, settype):
         """Initialization"""
-        self.list_ids = glob.glob('dataset/{}/*.png'.format(settype))
-        self.true_len = len(self.list_ids)
-        self.settype = settype
-        self.patch_size = 128
+        # 定义后缀名字典
+        extension_dict = {'train': '*.jpg', 'test': '*.bmp', 'valid': '*.png'}
+        file_extension = extension_dict.get(settype, '*.jpg')
+        self.list_ids = glob.glob('dataset/{}/*'.format(settype) + file_extension) # 获取所有图像文件的index
+        self.true_len = len(self.list_ids) # 实际加载的图像数量
+        self.settype = settype # 数据集类型
+        self.patch_size = 128 # 训练图像的裁剪大小
         self.eps = 1e-3
 
     def __len__(self):
         """Denotes the total number of samples"""
+        # 对于train dataset 重复使用图像以数据增强
         if self.settype == "train":
             return 64000
         else:

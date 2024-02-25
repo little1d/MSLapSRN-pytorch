@@ -30,6 +30,11 @@ def get_y(img):
 
     return img
 
+def get_y_cb_cr(img):
+    img_ycbcr = img.convert('YCbCr')
+    y, cb, cr = img_ycbcr.split()
+    return y, cb, cr
+
 
 checkpoint = torch.load('ckp.pt', map_location='cuda:0')
 net = LapSrnMS(5, 5, 4)
@@ -37,11 +42,12 @@ net = torch.nn.DataParallel(net).to(device)
 net.load_state_dict(checkpoint['state_dict'])
 net.to('cuda')
 
-im_4x = get_y(Image.open("dataset/19021.png"))
+# 分离三个通道
+y, cb, cr = get_y_cb_cr(Image.open("dataset/19021.png"))
 
-im = tf.to_tensor(im_4x)
+im = tf.to_tensor(y)
 im = im.unsqueeze(0)
-im = im.to('cuda')
+im = im.to('cuda:0')
 
 with torch.no_grad():
     out_2x, out_4x = net(im)
@@ -50,6 +56,20 @@ with torch.no_grad():
 
 out_2x = transforms.ToPILImage()(out_2x[0].cpu())
 out_4x = transforms.ToPILImage()(out_4x[0].cpu())
+
+cb_2x = cb.resize(out_2x.size, Image.BICUBIC)
+cr_2x = cr.resize(out_2x.size, Image.BICUBIC)
+
+cb_4x = cb.resize(out_4x.size, Image.BICUBIC)
+cr_4x = cr.resize(out_4x.size, Image.BICUBIC)
+
+# 将处理后的Y通道与原始的Cb、Cr通道合并
+out_2x = Image.merge("YCbCr", [out_2x.convert('L'), cb_2x, cr_2x])
+out_4x = Image.merge("YCbCr", [out_4x.convert('L'), cb_4x, cr_4x])
+
+# 将YCbCr格式的图像转换回RGB格式
+out_2x = out_2x.convert('RGB')
+out_4x = out_4x.convert('RGB')
 
 out_2x.save("out_2x.png", "PNG")
 out_4x.save("out_4x.png", "PNG")

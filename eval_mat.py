@@ -6,6 +6,7 @@ import scipy.io as sio
 import matplotlib.pyplot as plt
 from ssim import ssim
 
+from train import device
 from lapsrn import LapSrnMS
 
 
@@ -29,11 +30,12 @@ def SSIM(pred, gt, shave_border=0):
 
 if __name__ == '__main__':
     cuda = True
-    checkpoint = torch.load('best.pt')
+    checkpoint = torch.load('ckp.pt')
 
     model = LapSrnMS(5, 5, 4)
+    model = torch.nn.DataParallel(model).to(device)
     model.load_state_dict(checkpoint['state_dict'])
-    model = model.to('cuda:2')
+    model = model.to('cuda')
     model.eval()
 
     for scale in [2, 4]:

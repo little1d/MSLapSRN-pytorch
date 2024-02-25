@@ -1,3 +1,5 @@
+from train import device
+
 from lapsrn import *
 from PIL import Image, ImageFilter
 import torchvision.transforms.functional as tf
@@ -29,16 +31,17 @@ def get_y(img):
     return img
 
 
-checkpoint = torch.load('best.pt', map_location='cuda:0')
+checkpoint = torch.load('ckp.pt', map_location='cuda:0')
 net = LapSrnMS(5, 5, 4)
+net = torch.nn.DataParallel(net).to(device)
 net.load_state_dict(checkpoint['state_dict'])
-net.to('cuda:0')
+net.to('cuda')
 
 im_4x = get_y(Image.open("dataset/19021.png"))
 
 im = tf.to_tensor(im_4x)
 im = im.unsqueeze(0)
-im = im.to('cuda:0')
+im = im.to('cuda')
 
 with torch.no_grad():
     out_2x, out_4x = net(im)

@@ -42,10 +42,10 @@ class SRdataset(Dataset):
         # 定义后缀名字典
         extension_dict = {'train': '*.jpg', 'test': '*.png', 'validation': '*.bmp'}
         file_extension = extension_dict.get(settype, '*.jpg')
-        self.list_ids = glob.glob('dataset/{}/*'.format(settype) + file_extension) # 获取所有图像文件的index
-        self.true_len = len(self.list_ids) # 实际加载的图像数量
-        self.settype = settype # 数据集类型
-        self.patch_size = 128 # 训练图像的裁剪大小
+        self.list_ids = glob.glob('dataset/{}/*'.format(settype) + file_extension)  # 获取所有图像文件的index
+        self.true_len = len(self.list_ids)  # 实际加载的图像数量
+        self.settype = settype  # 数据集类型
+        self.patch_size = 128  # 训练图像的裁剪大小
         self.eps = 1e-3
 
     def __len__(self):

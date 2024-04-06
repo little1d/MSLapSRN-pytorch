@@ -19,6 +19,7 @@ def get_upsample_filter(size):
     # 返回一个 filter: 滤波器，用于图像上采样的双线性滤波器
     return torch.from_numpy(filter).float()
 
+
 # 包含多层卷积和LeakyReLU激活的递归块
 class RecursiveBlock(nn.Module):
     def __init__(self, d):
@@ -37,6 +38,7 @@ class RecursiveBlock(nn.Module):
     def forward(self, x):
         output = self.block(x)
         return output
+
 
 # 使用递归块对输入特征进行多次迭代，实现特征的嵌入
 class FeatureEmbedding(nn.Module):
@@ -57,6 +59,7 @@ class FeatureEmbedding(nn.Module):
             output = self.recursive_block(output) + x
 
         return output
+
 
 # 定义一个名为LapSrnMS的类，它继承自nn.Module，用于构建一个多尺度拉普拉斯超分辨率网络模型
 class LapSrnMS(nn.Module):
@@ -140,7 +143,6 @@ class LapSrnMS(nn.Module):
             predict = self.predict(features)
             # 将预测图像与上采样的输入图像相加
             out = torch.add(predict, rescaled_img)
-
             out = torch.clamp(out, 0.0, 1.0)
             # 将输出图像添加到输出图像列表中
             output_images.append(out)

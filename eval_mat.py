@@ -67,7 +67,7 @@ if __name__ == '__main__':
                 im_input = Variable(torch.from_numpy(im_input).float()).view(1, -1, im_input.shape[0], im_input.shape[1])
 
                 if cuda:
-                    im_input = im_input.to('cuda:2')
+                    im_input = im_input.to('cuda:0')
                 else:
                     model = model.cpu()
 

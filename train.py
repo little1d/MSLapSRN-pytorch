@@ -52,6 +52,8 @@ training_generator = data.DataLoader(training_set, batch_size=64, shuffle=True, 
 
 validation_set = SRdataset("validation")
 validation_generator = data.DataLoader(validation_set, batch_size=64, shuffle=False, num_workers=1, pin_memory=True)
+print(training_generator, validation_generator)
+print(len(training_generator))
 print(len(validation_generator))
 
 net = LapSrnMS(5, 5, 4)

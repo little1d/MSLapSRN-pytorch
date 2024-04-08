@@ -44,7 +44,7 @@ net.load_state_dict(checkpoint['state_dict'])
 net.to('cuda')
 
 # 分离三个通道
-y, cb, cr = get_y_cb_cr(Image.open("dataset/0_lr.png"))
+y, cb, cr = get_y_cb_cr(Image.open("dataset/5_lr.png"))
 
 im = tf.to_tensor(y)
 im = im.unsqueeze(0)
@@ -80,5 +80,5 @@ if not os.path.exists(folder_path):
     os.makedirs(folder_path)
 
 # 将图片保存到文件夹中
-out_2x.save(os.path.join(folder_path, "0_out_2x.png"), "PNG")
-out_4x.save(os.path.join(folder_path, "0_out_4x.png"), "PNG")
+out_2x.save(os.path.join(folder_path, "5_out_2x.png"), "PNG")
+out_4x.save(os.path.join(folder_path, "5_out_4x.png"), "PNG")

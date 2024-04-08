@@ -8,7 +8,7 @@ import torch
 import swanlab
 
 run = swanlab.init(
-    experiment_name="MSLapSRN_for_Fast_and_Accurate_Super-Resolution",
+    experiment_name="MSLapSRN-Super-Resolution",
     description="PyTorch LapSRN implementation with weight sharing and skip connections (MSLapSRN)",
     config={
         "init_lr": 0.001,

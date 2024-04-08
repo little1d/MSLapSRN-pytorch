@@ -5,7 +5,21 @@ from lapsrn import *
 import shutil
 import os
 import torch
+import swanlab
 
+run = swanlab.init(
+    experiment_name="Deep Laplacian Pyramid Networks for Fast and Accurate Super-Resolution",
+    description="PyTorch LapSRN implementation with weight sharing and skip connections (MSLapSRN)",
+    config={
+        "init_lr": 0.001,
+        "lr_decay_steps": 100,
+        "lr_decay_rate": 0.5,
+        "epochs": 200,
+        "batch_size": 64,
+        "patch_size": 128
+    },
+    logdir="swanlog"
+)
 
 
 def save_ckp(state, is_best, checkpoint_path, best_model_path):
@@ -27,7 +41,7 @@ def save_ckp(state, is_best, checkpoint_path, best_model_path):
 
 def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=100):
     """Decay learning rate by a factor of 2 every lr_decay_epoch epochs."""
-    lr = init_lr * (0.5**(epoch // lr_decay_epoch))
+    lr = init_lr * (0.5 ** (epoch // lr_decay_epoch))
 
     if epoch % lr_decay_epoch == 0:
         print('LR is set to {}'.format(lr))
@@ -60,7 +74,7 @@ print(len(validation_generator))
 net = LapSrnMS(5, 5, 4)
 
 if use_cuda:
-    net = torch.nn.DataParallel(net) #包装模型以支持多GPU
+    net = torch.nn.DataParallel(net)  # 包装模型以支持多GPU
     net.to(device)
 
 criterion = CharbonnierLoss()
@@ -103,9 +117,10 @@ if __name__ == '__main__':
 
             # print statistics
             running_loss_train += loss.item()
-            if i % 100 == 99:    # print every 5 mini-batches
+            if i % 100 == 99:  # print every 5 mini-batches
                 print('[%d, %5d] training loss: %.3f' %
                       (epoch + 1, i + 1, running_loss_train / 100))
+                swanlab.log({'training_loss': running_loss_train / 100})
                 running_loss_train = 0.0
 
         net.eval()
@@ -125,6 +140,7 @@ if __name__ == '__main__':
 
         print('[%d] validation loss: %.3f' %
               (epoch + 1, running_loss_valid))
+        swanlab.log({'validation_loss': running_loss_valid})
 
         if running_loss_valid < loss_min:
             checkpoint = {
@@ -139,3 +155,7 @@ if __name__ == '__main__':
         running_loss_valid = 0.0
 
     print('Finished Training')
+
+    image_path = "./out_2x.png"
+    image = swanlab.Image(image_path)
+    run.log({"out_2x": image})

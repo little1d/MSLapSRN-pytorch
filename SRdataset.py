@@ -52,7 +52,8 @@ class SRdataset(Dataset):
         """Denotes the total number of samples"""
         # 对于train dataset 重复使用图像以数据增强
         if self.settype == "train":
-            return 64000
+            # return 64000
+            return len(self.list_ids)
         else:
             return len(self.list_ids)
 

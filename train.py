@@ -7,8 +7,19 @@ import os
 import torch
 import swanlab
 
-
-
+run = swanlab.init(
+    experiment_name="MSLapSRN-Super-Resolution",
+    description="PyTorch LapSRN implementation with weight sharing and skip connections (MSLapSRN)",
+    config={
+        "init_lr": 0.001,
+        "lr_decay_steps": 100,
+        "lr_decay_rate": 0.5,
+        "epochs": 200,
+        "batch_size": 64,
+        "patch_size": 128
+    },
+    logdir="swanlog"
+)
 def save_ckp(state, is_best, checkpoint_path, best_model_path):
     """
     state: checkpoint we want to save
@@ -46,7 +57,7 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=100):
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda:0" if use_cuda else "cpu")
 
-max_epochs = 1000
+max_epochs = 100
 
 # Generators
 training_set = SRdataset("train")
@@ -68,19 +79,7 @@ criterion = CharbonnierLoss()
 optimizer = optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-4)
 
 if __name__ == '__main__':
-    run = swanlab.init(
-        experiment_name="MSLapSRN-Super-Resolution",
-        description="PyTorch LapSRN implementation with weight sharing and skip connections (MSLapSRN)",
-        config={
-            "init_lr": 0.001,
-            "lr_decay_steps": 100,
-            "lr_decay_rate": 0.5,
-            "epochs": 200,
-            "batch_size": 64,
-            "patch_size": 128
-        },
-        logdir="swanlog"
-    )
+
     # Loop over epochs
     loss_min = np.inf
     running_loss_valid = 0.0

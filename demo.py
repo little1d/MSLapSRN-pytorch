@@ -43,7 +43,7 @@ net.load_state_dict(checkpoint['state_dict'])
 net.to('cuda')
 
 # 分离三个通道
-y, cb, cr = get_y_cb_cr(Image.open("dataset/19021.png"))
+y, cb, cr = get_y_cb_cr(Image.open("dataset/0_lr.png"))
 
 im = tf.to_tensor(y)
 im = im.unsqueeze(0)

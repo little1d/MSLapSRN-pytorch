@@ -1,5 +1,5 @@
 from train import device
-
+import os
 from lapsrn import *
 from PIL import Image, ImageFilter
 import torchvision.transforms.functional as tf
@@ -29,6 +29,7 @@ def get_y(img):
     img = img.getchannel(0)
 
     return img
+
 
 def get_y_cb_cr(img):
     img_ycbcr = img.convert('YCbCr')
@@ -71,5 +72,13 @@ out_4x = Image.merge("YCbCr", [out_4x.convert('L'), cb_4x, cr_4x])
 out_2x = out_2x.convert('RGB')
 out_4x = out_4x.convert('RGB')
 
-out_2x.save("out_2x.png", "PNG")
-out_4x.save("out_4x.png", "PNG")
+# out_2x.save("out_2x.png", "PNG")
+# out_4x.save("out_4x.png", "PNG")
+# 检查文件夹是否存在，如果不存在则创建
+folder_path = "demo_image_output"
+if not os.path.exists(folder_path):
+    os.makedirs(folder_path)
+
+# 将图片保存到文件夹中
+out_2x.save(os.path.join(folder_path, "0_out_2x.png"), "PNG")
+out_4x.save(os.path.join(folder_path, "0_out_4x.png"), "PNG")

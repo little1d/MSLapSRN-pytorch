@@ -1,0 +1,24 @@
+batch_size:
+  desc: null
+  sort: 4
+  value: 64
+epochs:
+  desc: null
+  sort: 3
+  value: 200
+init_lr:
+  desc: null
+  sort: 0
+  value: 0.001
+lr_decay_rate:
+  desc: null
+  sort: 2
+  value: 0.5
+lr_decay_steps:
+  desc: null
+  sort: 1
+  value: 100
+patch_size:
+  desc: null
+  sort: 5
+  value: 128

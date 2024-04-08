@@ -8,7 +8,7 @@ import torch
 import swanlab
 
 run = swanlab.init(
-    experiment_name="Deep Laplacian Pyramid Networks for Fast and Accurate Super-Resolution",
+    experiment_name="MSLapSRN_for_Fast_and_Accurate_Super-Resolution",
     description="PyTorch LapSRN implementation with weight sharing and skip connections (MSLapSRN)",
     config={
         "init_lr": 0.001,
@@ -155,7 +155,3 @@ if __name__ == '__main__':
         running_loss_valid = 0.0
 
     print('Finished Training')
-
-    image_path = "./out_2x.png"
-    image = swanlab.Image(image_path)
-    run.log({"out_2x": image})
